@@ -1,0 +1,22 @@
+[
+  {"name":"Home · San Francisco, CA","lat":37.756107,"lon":-122.3882969,"posts":["/2021/03/16/goodbye-san-francisco/","/2021/03/17/home-is-where-i-keep-my-chocolates/"]},
+  {"name":"Mariposa, CA","lat":37.4746897,"lon":-119.737695,"arrival":"2021-03-15","departure":"2021-03-20","posts":["/2021/03/19/mariposa-ca/"]},
+  {"name":"The long drive east","lat":36.2704,"lon":-117.1909,"posts":["/2021/03/21/straight-nothingness/"]},
+  {"name":"Las Vegas, NV","lat":36.1699412,"lon":-115.1398296,"arrival":"2021-03-20","departure":"2021-04-03","posts":["/2021/04/01/the-post-pandemic-las-vegas-strip/","/2021/04/01/grocery-culture/","/2021/04/18/las-vegas-nv/"]},
+  {"name":"Red Rock Canyon, NV","lat":36.1357,"lon":-115.4275,"posts":["/2021/04/22/just-pics-red-rock-canyon/"]},
+  {"name":"Phoenix, AZ","lat":33.4483771,"lon":-112.0740373,"arrival":"2021-04-03","departure":"2021-05-07","posts":["/2021/04/23/desert-landscaping/","/2021/04/25/the-flooding-of-the-yards/"]},
+  {"name":"El Paso, TX","lat":31.7403326,"lon":-106.3361926,"arrival":"2021-05-07","departure":"2021-05-08","posts":[]},
+  {"name":"Austin, TX","lat":30.2758309,"lon":-97.704971,"arrival":"2021-05-08","departure":"2021-06-05","posts":["/2021/05/12/dinner-by-the-pound/"]},
+  {"name":"New Orleans, LA","lat":29.9510658,"lon":-90.0715323,"arrival":"2021-06-05","departure":"2021-06-26","posts":[]},
+  {"name":"Tallahassee, FL","lat":30.4382559,"lon":-84.2807329,"arrival":"2021-06-26","departure":"2021-06-27","posts":[]},
+  {"name":"Tampa, FL","lat":27.9506,"lon":-82.4572,"arrival":"2021-06-27","departure":"2021-07-31","posts":[]},
+  {"name":"Savannah, GA","lat":32.078654,"lon":-81.091708,"arrival":"2021-07-31","departure":"2021-08-14","posts":[]},
+  {"name":"Atlanta, GA","lat":33.7328315,"lon":-84.333117,"arrival":"2021-08-14","departure":"2021-08-21","posts":[]},
+  {"name":"Arden, NC","lat":35.4526397,"lon":-82.5661325,"arrival":"2021-08-21","departure":"2021-09-04","posts":[]},
+  {"name":"Durham, NC","lat":35.995871,"lon":-78.8951615,"arrival":"2021-09-04","departure":"2021-09-18","posts":[]},
+  {"name":"Washington, DC","lat":38.9072,"lon":-77.0369,"arrival":"2021-09-18","departure":"2021-10-16","posts":[]},
+  {"name":"Waterbury, VT","lat":44.337,"lon":-72.7562,"arrival":"2021-10-16","departure":"2021-10-23","posts":[]},
+  {"name":"Farmington, CT","lat":41.7198,"lon":-72.832,"arrival":"2021-10-23","departure":"2021-11-25","posts":[]},
+  {"name":"Easton, PA","lat":40.6884,"lon":-75.2207,"arrival":"2021-11-25","departure":"2022-01-02","posts":[]},
+  {"name":"Pittsburgh, PA","lat":40.4406,"lon":-79.9959,"arrival":"2022-01-02","departure":"2022-01-30","posts":[]}
+]

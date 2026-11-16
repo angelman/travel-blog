@@ -1,0 +1,38 @@
+---
+import '../styles/site.css';
+interface Props { title?: string; description?: string; }
+const { title = "Angel's Roadtrip", description = 'Notes and pictures from Angel’s roadtrip across the United States.' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const pathname = Astro.url.pathname.replace(/\/?$/, '/');
+const homePath = base + '/';
+const blogPath = base + '/blog/';
+const isHome = pathname === homePath;
+const isBlog = pathname === blogPath || /^\/\d{4}\/\d{2}\/\d{2}\//.test(pathname.slice(base.length));
+const canonical = new URL(pathname, Astro.site);
+const pageTitle = `${title} | Angel's Roadtrip`;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="Angel's Roadtrip" />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href={homePath}><span class="brand-title">Angel's Roadtrip</span><span class="brand-subtitle">Where in the world is Angel Sandiego</span></a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href={homePath} data-active={isHome} aria-current={isHome ? 'page' : undefined}>Home</a>
+        <a href={blogPath} data-active={isBlog} aria-current={pathname === blogPath ? 'page' : undefined}>Blog</a>
+      </nav>
+    </header>
+    <main><slot /></main>
+    <footer class="site-footer"><p><strong>Angel's Roadtrip</strong></p></footer>
+  </body>
+</html>

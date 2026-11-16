@@ -1,0 +1,5 @@
+import fs from 'node:fs/promises';
+const base=new URL('../',import.meta.url);const stops=JSON.parse(await fs.readFile(new URL('../src/data/stops.json',import.meta.url),'utf8'));
+const features=stops.map(s=>({type:'Feature',geometry:{type:'Point',coordinates:[s.lon,s.lat]},properties:{name:s.name,arrival:s.arrival||'',departure:s.departure||'',posts:s.posts||[]}}));
+for(let i=1;i<stops.length;i++){const a=stops[i-1],b=stops[i];const u=`https://router.project-osrm.org/route/v1/driving/${a.lon},${a.lat};${b.lon},${b.lat}?overview=full&geometries=geojson`;try{const r=await fetch(u);if(!r.ok)throw Error(String(r.status));const d=await r.json();if(!d.routes?.[0]?.geometry)throw Error('No route');features.push({type:'Feature',geometry:d.routes[0].geometry,properties:{from:a.name,to:b.name,approximate:true}});console.log(`${a.name} → ${b.name}`);}catch(e){console.warn(`Route unavailable: ${a.name} → ${b.name}: ${e}`);process.exitCode=1;}}
+await fs.writeFile(new URL('../public/data/route.geojson',import.meta.url),JSON.stringify({type:'FeatureCollection',features},null,2)+'\n');

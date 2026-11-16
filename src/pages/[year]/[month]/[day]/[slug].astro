@@ -1,0 +1,11 @@
+---
+import Site from '../../../../layouts/Site.astro';
+import PhotoViewer from '../../../../components/PhotoViewer.astro';
+import { render } from 'astro:content';
+import { getPosts } from '../../../../lib/posts';
+export async function getStaticPaths(){return (await getPosts()).map(post=>({params:{year:post.data.date.slice(0,4),month:post.data.date.slice(5,7),day:post.data.date.slice(8,10),slug:post.data.slug},props:{post}}));}
+const {post}=Astro.props;
+const { Content } = await render(post);
+const { title, date, categories, description } = post.data;
+---
+<Site title={title} description={description}><article class="article-shell"><p class="eyebrow">Road journal</p><div class="article-meta"><time datetime={date}>{date}</time>{categories[0] && <> · {categories[0]}</>}</div><h1 class="article-title">{title}</h1><div class="article-body"><Content /></div></article><PhotoViewer /></Site>

@@ -1,0 +1,20 @@
+---
+import Site from '../../layouts/Site.astro';
+import { getPosts, postPath } from '../../lib/posts';
+const posts=await getPosts();
+const base=import.meta.env.BASE_URL.replace(/\/$/,'');
+---
+<Site title="Journal" description="Read the posts from Angel’s roadtrip across the United States.">
+  <section class="journal">
+    <h1>Journal</h1>
+    <div class="journal-list">{posts.map(post=><article class="journal-entry"><time datetime={post.data.date}>{post.data.date}</time><h2><a href={base+postPath(post)}>{post.data.title}</a></h2><p>{post.data.description}</p></article>)}</div>
+  </section>
+</Site>
+<style>
+  .journal{max-width:760px;margin:4rem auto}
+  .journal-entry{padding:1.5rem 0;border-top:1px solid var(--line)}
+  .journal-entry time{color:var(--muted);font-size:.85rem}
+  .journal-entry h2{margin:.3rem 0 .5rem}
+  .journal-entry p{margin:0}
+  @media(max-width:640px){.journal{margin:2.5rem auto}}
+</style>

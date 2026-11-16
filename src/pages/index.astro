@@ -1,0 +1,38 @@
+---
+import Site from '../layouts/Site.astro';
+import { Image } from 'astro:assets';
+import hero from '../assets/media/2021/03/img_6114.jpg';
+import { getPosts, postPath } from '../lib/posts';
+const base=import.meta.env.BASE_URL.replace(/\/$/,'');
+const latest=(await getPosts()).slice(0,5);
+---
+<Site title="Home">
+  <section class="home-hero">
+    <Image src={hero} alt="Road through red rock country" format="webp" width={1920} widths={[640,960,1440,1920]} sizes="100vw" loading="eager" fetchpriority="high" />
+    <div class="home-hero-copy"><h1>Angel’s Roadtrip</h1><p>Notes and pictures from Angel’s roadtrip to learn about the rest of the country.</p></div>
+  </section>
+  <section class="home-map-section">
+    <div class="home-map-heading"><div><h2>Where in the world is Angel Sandiego?</h2><p>Follow the roadtrip from San Francisco across the South and up the East Coast.</p></div><a href={base+'/map/'}>Open the full map →</a></div>
+    <div id="home-map" data-base={base}></div>
+  </section>
+  <section class="latest-posts">
+    <h2>Latest from the Blog</h2>
+    {latest.map(post => <article class="home-post"><h3><a href={base+postPath(post)}>{post.data.title}</a></h3><p>{post.data.description}</p><time datetime={post.data.date}>{new Date(post.data.date+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}</time></article>)}
+    <p class="all-posts"><a href={base+'/blog/'}>View all posts →</a></p>
+  </section>
+  <script>
+    import L from 'leaflet';
+    import 'leaflet/dist/leaflet.css';
+    import { routeStyle, stopMarker } from '../lib/map-style';
+    const el=document.getElementById('home-map');
+    const base=el.dataset.base;
+    const map=L.map(el,{scrollWheelZoom:false,zoomControl:false}).setView([34,-100],4);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+    const data=await fetch(base+'/data/route.geojson').then(r=>r.json());
+    const layer=L.geoJSON(data,{style:routeStyle,pointToLayer:stopMarker,onEachFeature:(feature,marker)=>{if(feature.geometry.type==='Point'){const label=document.createElement('strong');label.textContent=feature.properties.name;marker.bindPopup(label);}}}).addTo(map);
+    map.fitBounds(layer.getBounds(),{padding:[28,28]});
+  </script>
+  <style>
+    .home-hero{position:relative;isolation:isolate;min-height:440px;margin:0 calc(50% - 50vw);display:grid;place-items:center;overflow:hidden}.home-hero:after{content:"";position:absolute;z-index:-1;inset:0;background:rgba(18,30,37,.28)}.home-hero img{position:absolute;z-index:-2;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}.home-hero-copy{padding:2rem;text-align:center;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.4)}.home-hero h1{font-size:clamp(2.45rem,5.5vw,4.5rem);margin:0;text-transform:uppercase;font-weight:750}.home-hero p{font-size:clamp(1rem,2.2vw,1.35rem);margin-top:1rem}.home-map-section{padding:3rem 0 3.5rem}.home-map-heading{display:flex;justify-content:space-between;align-items:end;gap:1rem;margin-bottom:1.1rem}.home-map-heading h2{margin-bottom:.35rem}.home-map-heading p{margin:0;color:var(--muted)}.home-map-heading a{font-weight:700;white-space:nowrap}.latest-posts{max-width:760px;margin:auto;padding:2.5rem 0;border-top:1px solid var(--line)}.latest-posts>h2{font-size:1.55rem;margin-bottom:1rem}.home-post{padding:1.3rem 0;border-top:1px solid var(--line)}.home-post h3{font-size:1.5rem;margin:0 0:.35rem}.home-post p{margin:0 0:.35rem}.home-post time{color:var(--muted);font-size:.86rem}.all-posts{font-weight:700;margin-top:1.6rem}@media(max-width:640px){.home-hero{min-height:340px}.home-map-heading{align-items:flex-start;flex-direction:column}}
+  </style>
+</Site>

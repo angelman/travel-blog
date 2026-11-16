@@ -1,0 +1,48 @@
+---
+import Site from '../layouts/Site.astro';
+import { getPosts, postPath } from '../lib/posts';
+const postTitles = Object.fromEntries((await getPosts()).map(post => [postPath(post), post.data.title]));
+const base=import.meta.env.BASE_URL.replace(/\/$/,'');
+---
+<Site title="Trip map" description="Explore the stops and related posts from Angel’s 2021–22 roadtrip.">
+  <p class="eyebrow">2021–22</p>
+  <h1>Trip map</h1>
+  <p class="map-intro">This map shows the stops from my 2021–22 road trip.</p>
+  <div id="map" data-base={base} data-post-titles={JSON.stringify(postTitles)}></div>
+  <p class="map-note">Select a stop to view related posts.</p>
+  <script>
+    import L from 'leaflet';
+    import 'leaflet/dist/leaflet.css';
+    import { routeStyle, stopMarker } from '../lib/map-style';
+    const el=document.getElementById('map');
+    const base=el.dataset.base;
+    const postTitles=JSON.parse(el.dataset.postTitles);
+    const map=L.map(el,{scrollWheelZoom:false}).setView([35.6,-111.5],5);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors',maxZoom:18}).addTo(map);
+    const data=await fetch(base+'/data/route.geojson').then(r=>r.json());
+    const layer=L.geoJSON(data,{style:routeStyle,pointToLayer:stopMarker,onEachFeature:(feature,marker)=>{
+      if(feature.geometry.type!=='Point')return;
+      const p=feature.properties;
+      const dates=p.arrival?'<p><small>'+new Date(p.arrival+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+' – '+new Date(p.departure+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+'</small></p>':'';
+      const popup=document.createElement('div');
+      const name=document.createElement('strong');
+      name.textContent=p.name;
+      popup.append(name);
+      if(dates){const dateBlock=document.createElement('div');dateBlock.innerHTML=dates;popup.append(dateBlock);}
+      const links=document.createElement('ul');
+      for(const path of p.posts||[]){
+        const title=postTitles[path];
+        if(!title)continue;
+        const item=document.createElement('li');
+        const link=document.createElement('a');
+        link.href=base+path;
+        link.textContent=title;
+        item.append(link);
+        links.append(item);
+      }
+      if(links.childElementCount)popup.append(links);
+      marker.bindPopup(popup);
+    }}).addTo(map);
+    map.fitBounds(layer.getBounds(),{padding:[35,35]});
+  </script>
+</Site>
